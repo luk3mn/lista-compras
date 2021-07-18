@@ -1,8 +1,13 @@
 <?php 
   require('php/database.php');
 
+  if (!isset($_SESSION['loginok'])) {
+    header('location: index.php');
+  }
+  
   # LENDO OS ITENS
-  $stmt = $conexao->prepare("SELECT * FROM itens_lista");
+  $stmt = $conexao->prepare("SELECT * FROM itens_lista WHERE user=?");
+  $stmt->bindValue(1, $_SESSION['username']);
   $stmt->execute();
 
   if ($stmt->rowCount() > 0) {
@@ -81,7 +86,7 @@
       <div class="modal-header"><div class="close"></div></div>
       <div class="modal-content">
         <ul>
-          <li><a href="logout.php">Sair</a></li>
+          <li><a href="php/logout.php">Sair</a></li>
         </ul>
       </div>
     </div>
